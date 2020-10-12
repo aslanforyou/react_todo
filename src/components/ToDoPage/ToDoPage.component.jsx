@@ -10,19 +10,50 @@ class ToDoPage extends Component {
   constructor(props) {
     super(props);
     this.clearTasks = this.clearTasks.bind(this);
-    this.markTasks = this.markTasks.bind(this);
+    this.markAllTasks = this.markAllTasks.bind(this);
+    this.markTask = this.markTask.bind(this);
+    this.addTask = this.addTask.bind(this);
 
     this.state = {
-      tasks: [{title: 'task1'}, {title: 'task2'}]
+      tasks: [
+        {title: 'task1', checked: false},
+        {title: 'task2'}
+        ],
+      taskLeft: 2,
     };
+  }
+
+  addTask(taskTitle) {
+    const tasks = this.state.tasks;
+    tasks.push({title: taskTitle});
+    this.setState({tasks});
   }
 
   clearTasks() {
     console.log('DEBUGG clear');
   }
 
-  markTasks() {
-    console.log('DEBUGG mark');
+  markAllTasks() {
+    console.log('DEBUGG mark All');
+    const unchecked = this.state.tasks.filter(task => !task.checked);
+    const allChecked = unchecked.length > 0;
+    const tasks = this.state.tasks.map(task => {
+      task.checked = allChecked;
+      return task;
+    });
+    this.setState({tasks, taskLeft: allChecked ? 0 : this.state.tasks.length});
+  }
+
+  markTask(updTask) {
+    const tasks = this.state.tasks.map(task => {
+      if (task.title === updTask.title) {
+        task = updTask;
+      }
+      return task;
+    });
+
+    const taskLeft = tasks.filter(task => !task.checked).length;
+    this.setState({tasks, taskLeft});
   }
 
   render() {
@@ -31,13 +62,17 @@ class ToDoPage extends Component {
       <div>
         <Header title='My todo list'/>
         <div className="container">
-          <Input/>
+          <Input addTask={this.addTask}/>
           {
-            this.state.tasks.map((task) => {
-              return <ToDoItem task={task}/>
+            this.state.tasks.map((task, i) => {
+              return <ToDoItem key={i} task={task} markTask={this.markTask}/>
             })
           }
-          <Footer clearTasks={this.clearTasks} markTasks={this.markTasks}/>
+          <Footer
+            clearTasks={this.clearTasks}
+            markTasks={this.markAllTasks}
+            tasksLeft={this.state.taskLeft}
+          />
         </div>
       </div>
     )

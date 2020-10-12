@@ -15,7 +15,7 @@ class Footer extends Component {
     return (
       <div className="footer_container">
         <button className="task_left_button" onClick={this.props.markTasks}>
-          {this.state.tasksLeft} tasks left
+          {this.props.tasksLeft || 0} tasks left
         </button>
         {this.state.clearFlag ?
           <button onClick={this.props.clearTasks}>
