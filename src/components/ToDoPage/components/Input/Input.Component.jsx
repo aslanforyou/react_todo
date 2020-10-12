@@ -1,10 +1,11 @@
 import React, {Component} from "react";
+import "./Input.css"
 
 class Input extends Component {
   render() {
     return (
-      <div>
-        <input placeholder="Add ToDo"/>
+      <div className="input_container">
+        <input placeholder="Enter your task here"/>
       </div>
     )
   }
