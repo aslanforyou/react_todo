@@ -1,0 +1,38 @@
+.footer_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.task_left_button, .task_left_button, .btn-group button {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+    color: #818083;
+}
+
+.task_left_button:last-of-type {
+    width: 120px;
+}
+.btn-group button {
+    color: #000;
+}
+
+.btn-group button.checked {
+    border: 1px #9b9b9b solid;
+    border-radius: 5px;
+}
+
+.task_left_button:hover, .task_left_button:hover, .btn-group button:hover {
+    background-color: #ebebeb;
+    color: #000000;
+}
+
+.hidden {
+    visibility: hidden;
+    width: 120px
+}

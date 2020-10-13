@@ -1,17 +1,14 @@
-import React, {Component} from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {title: this.props.title || 'Title'};
-  }
-  render() {
-    return (
-      <div>
-        <h3>{this.state.title}</h3>
-      </div>
-    )
-  }
-}
+const Header = ({ title }) => (
+  <div>
+    <h2>{title}</h2>
+  </div>
+);
+
+Header.propTypes = {
+  title: PropTypes.string.isRequired,
+};
 
 export default Header;
