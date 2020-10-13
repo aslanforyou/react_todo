@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import Header from "./components/Header/Header.Component";
 import Footer from "./components/Footer/Footer.Component";
-import './ToDoPage.css';
 import Input from "./components/Input/Input.Component";
 import ToDoItem from "./components/ToDoItem/ToDoItem.Component";
+import './ToDoPage.css';
 
 class ToDoPage extends Component {
 
@@ -33,12 +33,12 @@ class ToDoPage extends Component {
     }
     const tasks = this.state.tasks;
     tasks.push({title: taskTitle, ind: new Date().getTime()});
-    this.updateState(tasks, this.state.taskLeft + 1);
+    this.setState({tasks, taskLeft: this.state.taskLeft + 1});
   }
 
   clearTasks() {
     const tasks = this.state.tasks.filter(task => !task.checked);
-    this.updateState(tasks, tasks.length);
+    this.setState({tasks, taskLeft: tasks.length});
   }
 
   markAllTasks() {
@@ -49,7 +49,7 @@ class ToDoPage extends Component {
       return task;
     });
     const taskLeft = allChecked ? 0 : this.state.tasks.length;
-    this.updateState(tasks, taskLeft);
+    this.setState({tasks, taskLeft});
   }
 
   markTask(updTask) {
@@ -61,47 +61,35 @@ class ToDoPage extends Component {
     });
 
     const taskLeft = tasks.filter(task => !task.checked).length;
-    this.updateState(tasks, taskLeft);
+    this.setState({tasks, taskLeft});
   }
 
   deleteTask(delTask) {
-    const tasks = this.state.tasks.filter((task) => {
-      if (task.ind !== delTask.ind) {
-        return task;
-      }
-      return false;
-    });
+    const tasks = this.state.tasks.filter((task) => task.ind !== delTask.ind);
 
     const taskLeft = tasks.filter(task => !task.checked).length;
-    this.updateState(tasks, taskLeft);
+    this.setState({tasks, taskLeft});
   }
 
   setFilter(filter) {
     this.setState({filter});
   }
 
-  updateState(tasks, taskLeft) {
-    this.setState({tasks, taskLeft});
-  }
 
+  getTasks = () => this.state.tasks.filter(task => {
+      if (this.state.filter === 'all') {
+        return true;
+      }
+      if (this.state.filter === 'todo' && !task.checked) {
+        return true;
+      }
+      return this.state.filter === 'completed' && task.checked;
+    });
 
   render() {
-    let tasks = [];
-    const getTasks = () => {
-        tasks = this.state.tasks.filter(task => {
-          if (this.state.filter === 'all') {
-            return task;
-          }
-          if (this.state.filter === 'todo' && !task.checked) {
-            return task;
-          }
-          if (this.state.filter === 'completed' && task.checked) {
-            return task;
-          }
-          return false;
-        });
-        return tasks;
-    };
+    const tasksToShow = this.getTasks();
+    const {tasks, taskLeft, filter} = this.state;
+    const hasCompletedTasks = taskLeft < tasks.length;
 
     return (
       <div>
@@ -109,17 +97,18 @@ class ToDoPage extends Component {
         <div className="container">
           <Input addTask={this.addTask}/>
           {
-            getTasks().map((task, i) => {
-              return <ToDoItem key={i} task={task} markTask={this.markTask} deleteTask={this.deleteTask}/>
-            })
+            tasksToShow.map(task => (<ToDoItem key={task.ind}
+                               task={task}
+                               markTask={this.markTask}
+                               deleteTask={this.deleteTask}/>))
           }
           <Footer
             clearTasks={this.clearTasks}
             markTasks={this.markAllTasks}
-            tasksLeft={this.state.taskLeft}
-            clearFlag={this.state.taskLeft < this.state.tasks.length}
+            tasksLeft={taskLeft}
+            clearFlag={hasCompletedTasks}
             setFilter={this.setFilter}
-            filter={this.state.filter}
+            filter={filter}
           />
         </div>
       </div>
