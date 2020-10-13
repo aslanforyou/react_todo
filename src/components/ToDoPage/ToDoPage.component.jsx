@@ -13,6 +13,7 @@ class ToDoPage extends Component {
     this.markAllTasks = this.markAllTasks.bind(this);
     this.markTask = this.markTask.bind(this);
     this.addTask = this.addTask.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
 
     this.state = {
       tasks: [
@@ -26,15 +27,15 @@ class ToDoPage extends Component {
   addTask(taskTitle) {
     const tasks = this.state.tasks;
     tasks.push({title: taskTitle});
-    this.setState({tasks});
+    this.setState({tasks, taskLeft: this.state.taskLeft + 1});
   }
 
   clearTasks() {
-    console.log('DEBUGG clear');
+    const tasks = this.state.tasks.filter(task => !task.checked);
+    this.setState({tasks, taskLeft: tasks.length})
   }
 
   markAllTasks() {
-    console.log('DEBUGG mark All');
     const unchecked = this.state.tasks.filter(task => !task.checked);
     const allChecked = unchecked.length > 0;
     const tasks = this.state.tasks.map(task => {
@@ -44,12 +45,24 @@ class ToDoPage extends Component {
     this.setState({tasks, taskLeft: allChecked ? 0 : this.state.tasks.length});
   }
 
-  markTask(updTask) {
-    const tasks = this.state.tasks.map(task => {
-      if (task.title === updTask.title) {
+  markTask(updTask, index) {
+    const tasks = this.state.tasks.map((task, i) => {
+      if (i === index) {
         task = updTask;
       }
       return task;
+    });
+
+    const taskLeft = tasks.filter(task => !task.checked).length;
+    this.setState({tasks, taskLeft});
+  }
+
+  deleteTask(delTask, index) {
+    const tasks = this.state.tasks.filter((task, i) => {
+      if (i !== index) {
+        return task;
+      }
+      return null;
     });
 
     const taskLeft = tasks.filter(task => !task.checked).length;
@@ -65,13 +78,14 @@ class ToDoPage extends Component {
           <Input addTask={this.addTask}/>
           {
             this.state.tasks.map((task, i) => {
-              return <ToDoItem key={i} task={task} markTask={this.markTask}/>
+              return <ToDoItem key={i} task={task} index={i} markTask={this.markTask} deleteTask={this.deleteTask}/>
             })
           }
           <Footer
             clearTasks={this.clearTasks}
             markTasks={this.markAllTasks}
             tasksLeft={this.state.taskLeft}
+            clearFlag={this.state.taskLeft < this.state.tasks.length}
           />
         </div>
       </div>
