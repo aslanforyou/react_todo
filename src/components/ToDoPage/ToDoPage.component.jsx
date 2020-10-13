@@ -9,6 +9,7 @@ class ToDoPage extends Component {
 
   constructor(props) {
     super(props);
+
     this.clearTasks = this.clearTasks.bind(this);
     this.markAllTasks = this.markAllTasks.bind(this);
     this.markTask = this.markTask.bind(this);
@@ -32,12 +33,12 @@ class ToDoPage extends Component {
     }
     const tasks = this.state.tasks;
     tasks.push({title: taskTitle, ind: new Date().getTime()});
-    this.setState({tasks, taskLeft: this.state.taskLeft + 1});
+    this.updateState(tasks, this.state.taskLeft + 1);
   }
 
   clearTasks() {
     const tasks = this.state.tasks.filter(task => !task.checked);
-    this.setState({tasks, taskLeft: tasks.length});
+    this.updateState(tasks, tasks.length);
   }
 
   markAllTasks() {
@@ -47,7 +48,8 @@ class ToDoPage extends Component {
       task.checked = allChecked;
       return task;
     });
-    this.setState({tasks, taskLeft: allChecked ? 0 : this.state.tasks.length});
+    const taskLeft = allChecked ? 0 : this.state.tasks.length;
+    this.updateState(tasks, taskLeft);
   }
 
   markTask(updTask) {
@@ -59,7 +61,7 @@ class ToDoPage extends Component {
     });
 
     const taskLeft = tasks.filter(task => !task.checked).length;
-    this.setState({tasks, taskLeft});
+    this.updateState(tasks, taskLeft);
   }
 
   deleteTask(delTask) {
@@ -71,11 +73,15 @@ class ToDoPage extends Component {
     });
 
     const taskLeft = tasks.filter(task => !task.checked).length;
-    this.setState({tasks, taskLeft});
+    this.updateState(tasks, taskLeft);
   }
 
   setFilter(filter) {
     this.setState({filter});
+  }
+
+  updateState(tasks, taskLeft) {
+    this.setState({tasks, taskLeft});
   }
 
 
