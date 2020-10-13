@@ -1,36 +1,36 @@
-import React, {Component} from "react";
-import "./Input.css"
+import React, { useState } from 'react';
+import './Input.css';
+import PropTypes from 'prop-types';
 
-class Input extends Component {
+const Input = (props) => {
+  const { addTask } = props;
+  const [inputValue, setInputValue] = useState('');
 
-  constructor(props) {
-    super(props);
-    this.state = {value: ''};
-    this.handleChange = this.handleChange.bind(this);
-    this.addingTask = this.addingTask.bind(this);
-  }
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
 
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-
-  addingTask(event) {
-    if(event.keyCode === 13) {
-      this.props.addTask(this.state.value);
-      this.setState({value: ''});
+  const addingTask = (event) => {
+    if (event.keyCode === 13) {
+      addTask(inputValue);
+      setInputValue('');
     }
-  }
+  };
 
-  render() {
-    return (
-      <div className="input_container">
-        <input placeholder="Enter your task here"
-               value={this.state.value}
-               onChange={this.handleChange}
-               onKeyDown={(event) => this.addingTask(event)}/>
-      </div>
-    )
-  }
-}
+  return (
+    <div className="input_container">
+      <input
+        placeholder="Enter your task here"
+        value={inputValue}
+        onChange={(ev) => handleChange(ev)}
+        onKeyDown={(event) => addingTask(event)}
+      />
+    </div>
+  );
+};
+
+Input.propTypes = {
+  addTask: PropTypes.func.isRequired,
+};
 
 export default Input;

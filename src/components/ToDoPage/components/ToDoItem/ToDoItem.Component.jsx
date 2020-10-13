@@ -1,34 +1,39 @@
-import React, {Component} from "react";
-import "./ToDoItem.css"
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import React from 'react';
+import './ToDoItem.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 
-class ToDoItem extends Component {
-  checkTask() {
-    const task = { ...this.props.task };
+
+const ToDoItem = (props) => {
+  const { task, deleteTask, markTask } = props;
+  const checkTask = () => {
     task.checked = !task.checked;
-    this.props.markTask(task);
-  }
+    markTask(task);
+  };
 
-  render() {
-    return (
-      <div className={`todo_item_container ${this.props.task.checked ? 'checked' : ''}`}>
-        <div className="todo_item_checkbox" onClick={() => this.checkTask()}>
-          {/*<input type="checkbox"/>*/}
-          {this.props.task.checked ?
-            <FontAwesomeIcon icon="check"/>
-            : null}
-        </div>
-        <div className="todo_item_title">
-          <span>{this.props.task && this.props.task.title}</span>
-        </div>
-        <div className="todo_item_delete" onClick={() => {
-          this.props.deleteTask(this.props.task)
-        }}>
-          <FontAwesomeIcon icon="trash-alt"/>
-        </div>
+  return (
+    <div className={`todo_item_container ${task.checked ? 'checked' : ''}`}>
+      <button type="button" className="todo_item_checkbox" onClick={() => checkTask()}>
+        {task.checked ? <FontAwesomeIcon icon="check" /> : null}
+      </button>
+      <div className="todo_item_title">
+        <span>{task && task.title}</span>
       </div>
-    )
-  }
-}
+      <FontAwesomeIcon
+        icon="trash-alt"
+        className="todo_item_delete"
+        onClick={() => {
+          deleteTask(task);
+        }}
+      />
+    </div>
+  );
+};
+
+ToDoItem.propTypes = {
+  task: PropTypes.exact({ title: PropTypes.string, checked: PropTypes.bool, ind: PropTypes.number }).isRequired,
+  deleteTask: PropTypes.func.isRequired,
+  markTask: PropTypes.func.isRequired,
+};
 
 export default ToDoItem;

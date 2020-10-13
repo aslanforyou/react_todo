@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import ToDoPage from "./components/ToDoPage/ToDoPage.component";
+import ToDoPage from "./components/ToDoPage/ToDoPage.container";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {faCheck, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 

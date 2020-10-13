@@ -24,6 +24,8 @@
     justify-content: center;
     border: 1px solid #cccccc;
     border-radius: 50%;
+    background: none;
+    outline: none;
 }
 
 .todo_item_checkbox {

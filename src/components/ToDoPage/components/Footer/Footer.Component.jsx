@@ -1,31 +1,59 @@
-import React, {Component} from "react";
-import "./Footer.css"
+import React from 'react';
+import './Footer.css';
+import PropTypes from 'prop-types';
 
-class Footer extends Component {
+const Footer = (props) => {
+  const {
+    markTasks,
+    setFilter,
+    clearTasks,
+    filter,
+    tasksLeft,
+    clearFlag
+  } = props;
 
-  render() {
-    return (
-      <div className="footer_container">
-        <button className="task_left_button" onClick={this.props.markTasks}>
-          {this.props.tasksLeft || 0} tasks left
+  return (
+    <div className="footer_container">
+      <button type="button" className="task_left_button" onClick={markTasks}>
+        {`${tasksLeft || 0} tasks left`}
+      </button>
+      <div className="btn-group">
+        <button
+          type="button"
+          className={filter === 'all' ? 'checked' : ''}
+          onClick={() => setFilter('all')}
+        >
+          All
         </button>
-        <div className="btn-group">
-          <button className={this.props.filter === 'all' ? 'checked' : ''}
-                  onClick={() => this.props.setFilter('all')}>All
-          </button>
-          <button className={this.props.filter === 'todo' ? 'checked' : ''}
-                  onClick={() => this.props.setFilter('todo')}>ToDo
-          </button>
-          <button className={this.props.filter === 'completed' ? 'checked' : ''}
-                  onClick={() => this.props.setFilter('completed')}>Completed
-          </button>
-        </div>
-        <button className={this.props.clearFlag ? "task_left_button " : "hidden"} onClick={this.props.clearTasks}>
-          Clear completed
+        <button
+          type="button"
+          className={filter === 'todo' ? 'checked' : ''}
+          onClick={() => setFilter('todo')}
+        >
+          ToDo
+        </button>
+        <button
+          type="button"
+          className={filter === 'completed' ? 'checked' : ''}
+          onClick={() => setFilter('completed')}
+        >
+          Completed
         </button>
       </div>
-    )
-  }
-}
+      <button type="button" className={clearFlag ? 'task_left_button ' : 'hidden'} onClick={clearTasks}>
+        Clear completed
+      </button>
+    </div>
+  );
+};
+
+Footer.propTypes = {
+  markTasks: PropTypes.func.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  clearTasks: PropTypes.func.isRequired,
+  filter: PropTypes.string.isRequired,
+  tasksLeft: PropTypes.number.isRequired,
+  clearFlag: PropTypes.bool.isRequired
+};
 
 export default Footer;
