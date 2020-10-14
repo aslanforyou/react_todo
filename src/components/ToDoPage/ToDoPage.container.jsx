@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import Header from './components/Header/Header.Component';
 import Footer from './components/Footer/Footer.Component';
 import Input from './components/Input/Input.Component';
 import ToDoItem from './components/ToDoItem/ToDoItem.Component';
 import './ToDoPage.css';
+import {
+  selectTodos,
+  selectCounter,
+} from '../../app/reducers/ToDoReducer';
 
 const ToDoPage = () => {
   const [state, setState] = useState({
@@ -15,57 +20,15 @@ const ToDoPage = () => {
     filter: 'all'
   });
 
-  const addTask = (taskTitle) => {
-    if (taskTitle.toString().trim().length === 0) {
-      return;
-    }
-    const { tasks } = state;
-    tasks.push({ title: taskTitle, ind: new Date().getTime() });
-    setState({ tasks, taskLeft: state.taskLeft + 1, filter: state.filter });
-  };
-
-  const clearTasks = () => {
-    const tasks = state.tasks.filter((task) => !task.checked);
-    setState({ tasks, taskLeft: tasks.length, filter: state.filter });
-  };
-
-  const markAllTasks = () => {
-    const unchecked = state.tasks.filter((task) => !task.checked);
-    const allChecked = unchecked.length > 0;
-    const tasks = state.tasks.map((task) => {
-    // eslint-disable-next-line no-param-reassign
-      task.checked = allChecked;
-      return task;
-    });
-    const taskLeft = allChecked ? 0 : state.tasks.length;
-    setState({ tasks, taskLeft, filter: state.filter });
-  };
-
-  const markTask = (updTask) => {
-    const tasks = state.tasks.map((task) => {
-      if (task.ind === updTask.ind) {
-        return updTask;
-      }
-      return task;
-    });
-
-    const taskLeft = tasks.filter((task) => !task.checked).length;
-    setState({ tasks, taskLeft, filter: state.filter });
-  };
-
-  const deleteTask = (delTask) => {
-    const tasks = state.tasks.filter((task) => task.ind !== delTask.ind);
-
-    const taskLeft = tasks.filter((task) => !task.checked).length;
-    setState({ tasks, taskLeft, filter: state.filter });
-  };
+  const todos = useSelector(selectTodos);
+  const countTodo = useSelector(selectCounter);
 
   const setFilter = (filter) => {
-    setState({ tasks: state.tasks, taskLeft: state.taskLeft, filter });
+    setState({ filter });
   };
 
 
-  const getTasks = () => state.tasks.filter((task) => {
+  const getTasks = () => todos.filter((task) => {
     if (state.filter === 'all') {
       return true;
     }
@@ -76,28 +39,24 @@ const ToDoPage = () => {
   });
 
   const tasksToShow = getTasks();
-  const { tasks, taskLeft, filter } = state;
-  const hasCompletedTasks = taskLeft < tasks.length;
+  const { filter } = state;
+  const hasCompletedTasks = countTodo < todos.length;
 
   return (
     <div>
       <Header title="My todo list" />
       <div className="container">
-        <Input addTask={addTask} />
+        <Input />
         {
           tasksToShow.map((task) => (
             <ToDoItem
               key={task.ind}
               task={task}
-              markTask={markTask}
-              deleteTask={deleteTask}
             />
           ))
         }
         <Footer
-          clearTasks={clearTasks}
-          markTasks={markAllTasks}
-          tasksLeft={taskLeft}
+          tasksLeft={countTodo}
           clearFlag={hasCompletedTasks}
           setFilter={setFilter}
           filter={filter}

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import './Input.css';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { addToDo } from '../../../../app/reducers/ToDoReducer';
 
-const Input = (props) => {
-  const { addTask } = props;
+const Input = () => {
   const [inputValue, setInputValue] = useState('');
+
+  const dispatch = useDispatch();
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
@@ -12,7 +14,7 @@ const Input = (props) => {
 
   const addingTask = (event) => {
     if (event.keyCode === 13) {
-      addTask(inputValue);
+      dispatch(addToDo(inputValue));
       setInputValue('');
     }
   };
@@ -27,10 +29,6 @@ const Input = (props) => {
       />
     </div>
   );
-};
-
-Input.propTypes = {
-  addTask: PropTypes.func.isRequired,
 };
 
 export default Input;

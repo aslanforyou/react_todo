@@ -2,13 +2,20 @@ import React from 'react';
 import './ToDoItem.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { markTodo, deleteToDo } from '../../../../app/reducers/ToDoReducer';
 
 
 const ToDoItem = (props) => {
-  const { task, deleteTask, markTask } = props;
+  const { task } = props;
+  const dispatch = useDispatch();
+
   const checkTask = () => {
-    task.checked = !task.checked;
-    markTask(task);
+    dispatch(markTodo(task));
+  };
+
+  const deleteTask = () => {
+    dispatch(deleteToDo(task));
   };
 
   return (
@@ -31,9 +38,7 @@ const ToDoItem = (props) => {
 };
 
 ToDoItem.propTypes = {
-  task: PropTypes.exact({ title: PropTypes.string, checked: PropTypes.bool, ind: PropTypes.number }).isRequired,
-  deleteTask: PropTypes.func.isRequired,
-  markTask: PropTypes.func.isRequired,
+  task: PropTypes.exact({ title: PropTypes.string, checked: PropTypes.bool, ind: PropTypes.string }).isRequired,
 };
 
 export default ToDoItem;

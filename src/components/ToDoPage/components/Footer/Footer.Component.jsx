@@ -1,16 +1,27 @@
 import React from 'react';
 import './Footer.css';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { deleteChecked, markAll } from '../../../../app/reducers/ToDoReducer';
+
 
 const Footer = (props) => {
   const {
-    markTasks,
     setFilter,
-    clearTasks,
     filter,
     tasksLeft,
     clearFlag
   } = props;
+
+  const dispatch = useDispatch();
+
+  const markTasks = () => {
+    dispatch(markAll());
+  };
+
+  const clearTasks = () => {
+    dispatch(deleteChecked());
+  };
 
   return (
     <div className="footer_container">
@@ -48,9 +59,7 @@ const Footer = (props) => {
 };
 
 Footer.propTypes = {
-  markTasks: PropTypes.func.isRequired,
   setFilter: PropTypes.func.isRequired,
-  clearTasks: PropTypes.func.isRequired,
   filter: PropTypes.string.isRequired,
   tasksLeft: PropTypes.number.isRequired,
   clearFlag: PropTypes.bool.isRequired

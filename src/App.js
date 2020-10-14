@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import ToDoPage from "./components/ToDoPage/ToDoPage.container";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {faCheck, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCheck, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import ToDoPage from './components/ToDoPage/ToDoPage.container';
 
 library.add(faCheck, faTrashAlt);
 
@@ -10,7 +10,7 @@ library.add(faCheck, faTrashAlt);
 function App() {
   return (
     <div className="App">
-      <ToDoPage/>
+      <ToDoPage />
     </div>
   );
 }
